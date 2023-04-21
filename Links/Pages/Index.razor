@@ -1,0 +1,85 @@
+﻿@using Links.Models;
+@using Microsoft.EntityFrameworkCore;
+
+@using System.Diagnostics;
+
+
+@inject Links.Models.LinksContext LinksContext;
+@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+
+
+<SurveyPrompt Title="How is Blazor working for?" />
+
+<button @onclick="v">search</button>
+
+<InputText @bind-Value="noden"></InputText>
+
+
+
+@if (ln != null )
+{
+   @if (ln.Count > 0)
+        {
+ @foreach (var c in ln)
+{
+     
+             <h5>@c.getParentNames()</h5>
+}
+        }
+        else
+{
+            <h5>@ln.Count</h5>
+}
+    }
+
+
+
+
+
+<br />
+n - @n?.NodeName
+<br />
+
+
+@*<Links.Components.UsersCombobox DisplayedValue="n?.NodeName" OnSelected="v"></Links.Components.UsersCombobox>
+*@
+
+@code{
+    string noden;
+    string noden2;
+    int id;
+    List<Node> ln ;
+    Dictionary<string,object> Code ;
+    Node? n { set; get; }
+
+    void v(object e)
+    {
+        ln = LinksContext.Contents
+        .Where(x => EF.Functions
+            .Contains(x.Data, noden, 1058))
+            .Include(x => x.IdNavigation)
+            .Select(x=>x.IdNavigation)
+            .ToList();
+
+        //n = (Node)e;
+        //Debug.WriteLine("ghjghjgjgjg");
+        //Debug.WriteLine(n?.Id);
+        StateHasChanged();
+        //List<Option<Severity?>> SeverityOptionList = 
+        //Enum.GetValues(typeof(Severity))
+        //.Cast<Severity?>()
+        //.Where(x => x != Severity.None)
+        //.Select(x => new Option<Severity?> { Key = x.Value, Value = x.Value }).ToList();
+
+       // List<Option<Node>> NodeList = LinksContext.Nodes.Select(x => new Option<Node>{ Value = x }).ToList();
+    }
+  
+
+}

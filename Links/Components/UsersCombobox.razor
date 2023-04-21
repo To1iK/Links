@@ -1,0 +1,159 @@
+﻿@inject Links.Models.LinksContext LinksContext;
+@using Links.Models;
+@using Microsoft.EntityFrameworkCore;
+@using System.ComponentModel.DataAnnotations;
+@using System.Diagnostics;
+
+
+<div @onmouseleave="LostFocus" style="position: relative; cursor: pointer;">
+
+
+    <div @onclick="ShowList" style="display: flex; align-content:center;cursor: pointer;">
+
+        <label style="margin: 1px; flex-grow:2; word-break:break-word; min-height:25px; background-color:lavender">@DisplayedValue</label>
+
+        @*<label style="margin: 1px; flex-grow:2; word-break:break-word">@r.LaborRelationsNavigation.EmployeeNavigation.FullName</label>*@
+
+        <spann style="margin: 4px; font-size:11px;" class=@(cb_opened?"oi oi-chevron-top":"oi oi-chevron-bottom")></spann>
+    </div>
+
+    @if (cb_opened)
+    {
+
+        <div @onmouseleave="LostFocus"
+             style="position:absolute;
+                width: 100%;
+                min-height:28px;
+                padding: 1px;
+                color: black;
+                background-color: lightyellow;
+                border:red solid 1px; border-radius: 8px;
+                z-index:@(Convert.ToInt32(cb_opened)*9999)">
+
+
+            <div style="width: 100%; display:flex; align-content:center; z-index: 9999; position:fixed" >
+                <span style="align-self: center; top:0;" class="oi oi-magnifying-glass"></span>
+                <input type="text" autocomplete="off"
+                       style="flex: 2;
+                              width:100%;
+                              border:var(--font-color2) solid 1px; border-radius: 5px;
+                              margin:2px;"
+                @oninput="FilterChange" />
+                <button @onclick="clear" style="display:inline-block;">x</button>
+                <button @onclick="()=>change_page(-10)" style="display:inline-block; font-size:10px;">◄</button>
+                @*<small style="align-self: center;">@listCount</small>*@
+                <button @onclick="()=>change_page(10)" style="display:inline-block; font-size:10px;">►</button>
+            </div>
+            <hr style="width: auto;  height: 1px; margin: 4px; background-color:greenyellow;">
+            <ul class="cb_ul">
+                @foreach (var lr in List)
+
+                {
+                    <li class="cb_li" @onclick="()=>select(lr)">
+                        <span>@lr.Name</span>
+                    </li>
+                }
+            </ul>
+
+        </div>
+    }
+
+</div>
+
+
+
+
+@code {
+   
+    public object SelectedObject { get; set; }
+
+    [Parameter]
+    public object DisplayedValue { get; set; }
+
+    [Parameter] public EventCallback<object> OnSelected  { get; set; }
+
+    List<User> List;
+    int listCount;
+
+    int CurentEmpId = 1;
+    int CurentPage = 0;
+    string filter = "";
+
+    bool cb_opened = false;
+
+    void fill_List()
+    {
+
+        listCount = LinksContext.Users
+    .Where(p => (p.Name)
+    .Contains(filter)).Count();
+
+        List = LinksContext.Users
+    .Where(p => (p.Name).ToUpper()
+    .Contains(filter.ToUpper()))
+    .Skip(CurentPage)
+    .Take(10)
+    .ToList();
+    }
+
+
+    void change_page(int p)
+    {
+        CurentPage = CurentPage + p;
+        if (CurentPage < 0)
+        {
+            CurentPage = 0;
+        }
+        else if (CurentPage > listCount)
+        {
+            CurentPage = CurentPage - p;
+        }
+        fill_List();
+
+    }
+
+    void select(Object e)
+    {      
+        cb_opened = false;
+        filter = "";        
+        OnSelected.InvokeAsync(e);
+      
+    }
+
+    void ShowList()
+    {
+        if (cb_opened)
+        {
+            cb_opened = false;
+            filter = "";
+        }
+        else
+        {
+            cb_opened = true;
+            fill_List();
+        }
+    }
+
+    void FilterChange(ChangeEventArgs e)
+    {
+        if (filter != null | filter != "")
+        {
+            filter = e.Value.ToString();
+            fill_List();
+            CurentPage = 0;
+        }
+    }
+
+    void LostFocus()
+    {
+        cb_opened = false;
+    }
+
+    void clear()
+    {
+        OnSelected.InvokeAsync(null);
+    }
+    }
+
+
+

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Links</name>
+    </assembly>
+    <members>
+        <member name="M:Links.Operations.createFirstTrn(System.Int32)">
+            <summary>
+            Створення першої транзакції процесу за вказаним ідентифікатором етапу
+            </summary>
+            <param name="stage">Ідентифікатор етапу в базі даних</param>    
+        </member>
+        <member name="M:Links.Operations.createEndTrfromStartTr(System.Int32)">
+            <summary>
+            Створення наступних транзакцій на основі поточної
+            </summary>
+            <param name="curentTid">Ідентифікатор транзакції в БД</param>
+        </member>
+    </members>
+</doc>

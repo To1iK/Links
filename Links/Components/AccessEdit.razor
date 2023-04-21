@@ -1,0 +1,86 @@
+﻿@using Links.Models;
+@inject Links.Models.LinksContext LinksContext;
+
+@if (na != null)
+{
+
+    <EditForm Model="na" style="height:35vh">
+
+ 
+            <span class="info_label">Тип доступу: </span>
+            <InputRadioGroup @bind-Value="isUser">
+              <InputRadio Value="true"/>Користувач
+              <InputRadio Value="false"/>Група
+            </InputRadioGroup>
+
+     
+
+    
+        @if (isUser)
+        {
+            na.UserId = LinksContext.curentUser.Id;
+            na.GroupId = null;
+        }
+        else
+        {
+            na.GroupId = 1;
+            na.UserId = null;
+        }
+
+
+        @if (na.UserId != null)
+        {
+            <Links.Components.UsersCombobox DisplayedValue="na?.User?.Name" OnSelected="setUG"></Links.Components.UsersCombobox>
+        }
+        else if (na.GroupId != null)
+        {
+            <Links.Components.GroupCombobox DisplayedValue="na?.Group?.Name" OnSelected="setUG"></Links.Components.GroupCombobox>
+        }
+
+
+        <span class="info_label">Доступ: </span>
+        <InputSelect @bind-Value="na.AccessLevel">
+            <option value="10">Перегляд</option>
+            <option value="20">Редагування</option>
+            <option value="30">Додавання нових</option>
+            @if (isUser)
+            {
+                <option value="100">Власник</option>
+            }
+        </InputSelect>
+
+        <br />
+        <span class="info_label">Назва вузла: @na.Node?.NodeName</span>
+
+    </EditForm>
+}
+
+@code {
+
+    [Parameter]
+    public NodeAccess na { get; set; }
+
+    public bool isUser = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //types = LinksContext.NodeTypes.ToList();
+
+    }
+
+    void setUG(object e)
+    {
+        if (e != null){
+            if (e.GetType() == typeof(User))
+        {
+            na.User = (User)e;
+        }
+        else if (e.GetType() == typeof(Group))
+        {
+            na.Group = (Group)e;
+        }  
+        }
+  
+    }
+
+}

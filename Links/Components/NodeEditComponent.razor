@@ -1,0 +1,67 @@
+﻿@using Links.Models;
+@inject Links.Models.LinksContext LinksContext;
+
+@if (node != null)
+{   
+
+    <EditForm Model="node" >
+        <br />
+        <span class="info_label">Назва вузла: </span>
+        <br />
+        <InputText class="data_label" style="width: 99%;" @bind-Value="node.NodeName" required />
+        <br />
+        <span class="info_label">Тип вузла: </span>
+        <InputSelect @bind-Value="node.NodeTypeId" class="data_label" style="width: 99%;">
+            @*@if (types != null)
+                {*@
+            @foreach (var t in types)
+                {
+                    <option style="max-width:300px;" value=@t.Id>
+                        @t.TypeName
+                    </option>
+                }
+            @*}*@
+        </InputSelect>
+        <br />
+        <span class="info_label">Контейнер</span><br />
+        @*<Links.Client.Components.ComboTree SelectedObject="node"></Links.Client.Components.ComboTree>*@
+      
+         @* <Links.Components.Combos.ComboTree @bind-SelectedObject="ntn.ParentNodeNavigation"></Links.Components.Combos.ComboTree>
+  *@        
+        
+        <InputCheckbox class="data_label" style=" height: 18px; width: 18px; vertical-align: middle;" @bind-Value="node.IsContainer" />
+        <span class="info_label">Може вміщати інші елементи</span>
+        <br />
+        <span class="info_label">Вміст: </span>
+        <InputTextArea @bind-Value="node.NodeContent" class="data_label" style="width: 99%;"></InputTextArea>
+        <span class="info_label">Опис: </span>
+        <InputTextArea @bind-Value="node.Description" class="data_label" style="width: 99%;"></InputTextArea>
+       
+        <span class="info_label">Пріоритет: </span>
+        <InputNumber @bind-Value="node.Order" class="data_label" type="number" step="1" min="0" style="width: 50px;"></InputNumber>
+       
+        <br />     
+      
+        <small>Модифіковано: @node?.EditTime</small>
+       
+
+
+
+    </EditForm>
+}
+@code {
+
+    [Parameter]
+    public Node node { get; set; } = new Node();
+
+    List<NodeType> types; 
+
+    protected override async Task OnInitializedAsync()
+    {
+        types = LinksContext.NodeTypes.ToList();     
+
+    }
+
+
+
+}

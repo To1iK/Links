@@ -1,0 +1,70 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>Links</PageTitle>
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+         
+            @Body
+  
+   @*     <Links.Pages.Viewer></Links.Pages.Viewer>*@
+    </main>
+</div>
+
+@code{
+
+    [Inject]
+    public Links.Models.LinksContext LinksContext { get; set; }
+
+    [Inject]
+    AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    async protected override void OnInitialized()
+    {
+        var authState = await AuthenticationStateProvider
+               .GetAuthenticationStateAsync();
+
+        var user = authState.User;
+
+        if (user is null || String.IsNullOrEmpty(user.Identity?.Name))
+        {
+            Models.User _user = new Models.User();
+
+            _user.Id = 0;
+            _user.Login = "NoNameUser";
+            _user.Name = "NoNameUser";
+            _user.FirstName = "NoNameUser";
+            LinksContext.curentUser = _user;
+        }
+        else
+        {
+
+            LinksContext.curentUser = LinksContext.Users.Where(u => u.Login == user.Identity.Name)
+           .FirstOrDefault(); 
+
+            if (LinksContext.curentUser == null)
+            {
+
+                Models.User _user = new Models.User();
+                _user.Id = 0;
+                _user.Login = user.Identity.Name;
+                _user.Name = "notRegisterName";
+                LinksContext.Users.Add(_user);
+
+                _user.Groups.Add(LinksContext.Groups.Find(1));
+
+                LinksContext.SaveChanges();
+            }
+
+        }
+
+     
+
+  
+
+    }
+}

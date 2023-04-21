@@ -1,0 +1,9 @@
+﻿@inject Links.Models.LinksContext LinksContext;
+
+<Links.Components.Modal @ref="Modal1" OnClose="ModalClose"><Links.Components.NodeEditComponent @ref="NEC" node="@selectedNode" /></Links.Components.Modal>
+
+
+@foreach (var n in Nodes)
+{
+    <Links.Components.NodeComponent onSelect="select" onEdit="openModal" na="n"></Links.Components.NodeComponent>
+}

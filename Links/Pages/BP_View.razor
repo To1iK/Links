@@ -1,0 +1,44 @@
+﻿@using Links.Models;
+@using Microsoft.EntityFrameworkCore;
+@using System.Text.Json;
+
+@inject LinksContext _LinksContext
+
+@page "/BP_View/{nodeId:int}"
+
+@((MarkupString)ms1)
+
+<button @onclick="addItem">render</button>
+
+@if (_LinksContext.Nodes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+
+    @if (node != null)
+    {
+    <h2>@node.NodeName</h2>
+    <h4>@node.Description</h4>
+    }
+
+
+    <select @bind="stageId">
+  @foreach(var sur in _LinksContext.StageUserRoles
+    .Where(x => x.Stage.ProcessId ==nodeId & x.UserId==userId )
+    .Include(x=>x.Stage)
+    .Include(x=>x.Role)    
+    .OrderBy(x=>x.Stage.N)
+    )
+    {
+        <option value="@sur.StageId">@sur.Stage.Name</option>
+    }
+
+       </select>
+  
+   
+}
+
+

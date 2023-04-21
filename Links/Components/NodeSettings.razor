@@ -1,0 +1,129 @@
+﻿@using Links.Models;
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using Microsoft.EntityFrameworkCore;
+@inject Links.Models.LinksContext LinksContext;
+
+
+<Links.Components.Modal @ref="Modal1" OnClose="ModalClose"><Links.Components.AccessEdit @ref="NEC" na="@curentNA" /></Links.Components.Modal>
+
+
+<article style="display:flex; width:90%; margin:auto">
+    
+    <section style="height:30vh">
+
+        <QuickGrid Items="@LinksContext.NodeAccesses.Include(x=>x.User).Include(x=>x.Group).Where(x =>x.NodeId==node.Id )" >
+          
+            <PropertyColumn Property="@(p => p.UserId!=null?"Користувач":"Група")" Sortable="true" />
+                <TemplateColumn Title="Name" Sortable="true">   
+                    <ChildContent>
+                    @(context.User!=null?context.User.Name:"")
+                    @(context.Group!=null?context.Group.Name:"")
+                    </ChildContent>
+                </TemplateColumn>
+      @*      <PropertyColumn Property="@(p => p.User!=null?p.User.Name:@"")" Sortable="true" />
+            <PropertyColumn Property="@(p => p.Group!=null?p.Group.Name:@"")" Sortable="true" />*@
+            <PropertyColumn Property="@(p => p.AccessLevel)" Sortable="true" />          
+               <TemplateColumn> 
+                
+               <HeaderTemplate>
+                    <button @onclick="add" >Add</button>                   
+               </HeaderTemplate>
+
+                <ChildContent>
+                    @if (context.AccessLevel != 100 | context.UserId==LinksContext.curentUser.Id)
+                    {
+                    <button @onclick="(()=>openModal(context))">edit</button>
+                    <button @onclick="(()=>delete(context))">x</button> 
+                    }
+                 
+                </ChildContent>
+          
+                </TemplateColumn>
+
+        </QuickGrid>
+              
+           
+    </section>
+
+   @* <section style="height:30vh">
+
+        <QuickGrid Items="@LinksContext.NodeAccesses.Include(x=>x.Group).Where(x =>x.NodeId==node.Id & x.GroupId !=null)">
+            <PropertyColumn Property="@(p => p.Group.Name)" Sortable="true" />
+            <PropertyColumn Property="@(p => p.AccessLevel)" Sortable="true" />
+            <TemplateColumn>
+
+                <HeaderTemplate>
+                    <button @onclick="addG">Add</button>
+                </HeaderTemplate>
+
+                <ChildContent>
+                    <button @onclick="(()=>openModal(context))">edit</button>
+                    <button @onclick="(()=>delete(context))">x</button>
+                </ChildContent>
+
+            </TemplateColumn>
+
+        </QuickGrid>
+ 
+    </section>*@
+
+</article>
+
+
+@code{
+
+
+    private Links.Components.Modal Modal1 { get; set; }
+
+    private Links.Components.AccessEdit NEC { get; set; }
+
+    public NodeAccess curentNA { get; set; } 
+
+    void openModal(object n)
+    {
+        curentNA = (NodeAccess)n;       
+        StateHasChanged();
+        Modal1.Open();
+    }
+
+    void ModalClose(bool state)
+    {
+        if (state == true)
+        {
+        node.NodeAccesses.Add(curentNA);
+        LinksContext.SaveChanges();
+        }
+
+        StateHasChanged();
+    }
+
+    void add()
+    {
+        curentNA = new NodeAccess();
+        curentNA.Node = node;
+        //curentNA.GroupId = null;
+        //curentNA.UserId = LinksContext.curentUser.Id;
+     
+        Modal1.Open();
+    }    
+    //void addG()
+    //{
+    //    curentNA = new NodeAccess();
+    //    curentNA.Node = node;
+    //    curentNA.GroupId = 1;
+    //    curentNA.UserId = null;     
+    //    Modal1.Open();
+    //}
+
+    void delete(object n)
+    {        
+        LinksContext.Remove((NodeAccess)n);
+        LinksContext.SaveChanges();
+        StateHasChanged();
+     
+    }
+}
+
+
+
+

@@ -1,0 +1,48 @@
+﻿@page "/fetchdata/{testP:int}"
+
+
+@using Links.Models;
+@using Microsoft.EntityFrameworkCore;
+
+@inject LinksContext _LinksContext
+
+<PageTitle>Weather forecast</PageTitle>
+<span>@testP</span>
+
+<Links.Components.NodeListComponent></Links.Components.NodeListComponent>
+
+
+@code {
+
+    [Parameter]
+    public int testP { get; set; }
+    // private List<Node> nodes;
+    //_LinksContext.;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        // await ForecastService.GetForecastAsync(DateOnly.FromDateTime(DateTime.Now));
+    }
+
+    private void addItem()
+    {
+        Node n = new Node();
+        n.NodeName = "myNode2";
+
+        n.Code =  DateTime.Now.Ticks.ToString("x"); //DateTime.Now.Ticks.ToString();
+        n.NodeTypeId = 1;
+        _LinksContext.Nodes.Add(n);              
+
+        _LinksContext.SaveChanges();
+        StateHasChanged();
+    }
+
+    private void editItem(Node n)
+    {
+
+        n.Code = DateTime.Now.Ticks.ToString("x");
+        _LinksContext.SaveChanges();
+        StateHasChanged();
+    }
+}

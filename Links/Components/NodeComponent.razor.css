@@ -1,0 +1,17 @@
+﻿li {
+    list-style: none;
+    padding: 2px;
+    margin-bottom: 2px;
+    border-radius: 5px;
+   
+}
+
+
+ul {
+    padding: 0;
+    padding-left: 10px;
+    border-left: dotted 1px black;  
+    margin-left: 15px;
+   
+}
+

@@ -1,0 +1,117 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "LinksContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": true,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "Links",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "Name": "[dbo].[Choices]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Contents]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Details]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Files]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Groups]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[History]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MSGforUsers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MSGs]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[NodeAccess]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Nodes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[NodeTypes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[ObjectDetails]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Roles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Stages]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[StageUserRoles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Transactions]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TrToTr]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UserGroups]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[UserNodes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Users]",
+         "ObjectType": 0
+      }
+   ],
+   "UiHint": "desktop-7f3bll4.Links.dbo",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": true,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

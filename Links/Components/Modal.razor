@@ -1,0 +1,64 @@
+﻿
+<div id="modal_div"
+     style="display:@ModalDisplay">
+
+    <div id="modal_header" onmousedown="onModalMouseDown(event)">
+        <span>Links</span>
+        <button class="icon-btn" @onclick="()=>Close(true)">
+            OK
+        </button>
+        <button class="icon-btn" @onclick="()=>Close(false)">
+           не OK
+        </button>
+    </div>
+
+    <div>
+        @ChildContent
+    </div>
+
+
+
+</div>
+
+
+
+@if (ShowBackdrop)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+
+@code {
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter] public EventCallback<bool> OnClose { get; set; }
+
+    public Action closed { get; set; }
+
+    public string ModalDisplay = "none;";
+    public string ModalClass = "";
+    public bool ShowBackdrop = false;
+
+    public void Open()
+    {
+        ModalDisplay = "block;";
+        ModalClass = "Show";
+        ShowBackdrop = true;
+        StateHasChanged();
+
+    }
+
+
+    public void Close(bool state)
+    {
+        ModalDisplay = "none";
+        ModalClass = "";
+        ShowBackdrop = false;
+        OnClose.InvokeAsync(state);
+
+    }
+
+
+}
