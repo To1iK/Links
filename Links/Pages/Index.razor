@@ -63,7 +63,8 @@ n - @n?.NodeName
     {
         ln = LinksContext.Contents
         .Where(x => EF.Functions
-            .Contains(x.Data, noden, 1058))
+            .Contains(x.Data, noden, 1058) || EF.Functions
+            .FreeText(x.Data, noden, 1058))
             .Include(x => x.IdNavigation)
             .Select(x=>x.IdNavigation)
             .ToList();
