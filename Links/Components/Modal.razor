@@ -4,12 +4,17 @@
 
     <div id="modal_header" onmousedown="onModalMouseDown(event)">
         <span>Links</span>
-        <button class="icon-btn" @onclick="()=>Close(true)">
-            OK
-        </button>
-        <button class="icon-btn" @onclick="()=>Close(false)">
-           не OK
-        </button>
+
+        <div style="display:flex">
+            <button class="icon-btn" @onclick="()=>Close(true)">
+                OK
+            </button>
+            <button class="icon-btn" @onclick="()=>Close(false)">
+                Відміна
+            </button>
+        </div>
+  
+
     </div>
 
     <div>

@@ -18,6 +18,7 @@ using Links.Models;
 using static System.Net.Mime.MediaTypeNames;
 using Markdig;
 using System.Security.Claims;
+using System.Drawing.Drawing2D;
 
 namespace Links.Pages
 {
@@ -30,39 +31,48 @@ namespace Links.Pages
         public int nodeId { get; set; }
 
 
-        [Parameter]
-        public int main { get; set; } = -1;
+        //[Parameter]
+        //public int mainNodeId {
+        //    get {
+        //        return LinksContext.MainNode.Id;
+        //    }
+        //    set
+        //    {
+        //        var mn = LinksContext.Nodes.Find(mainNodeId);
+        //        if (mn == null)
+        //        {
+        //            mn = new Node();
+        //            mn.NodeName = "Кореневий вузол Links";
+        //            mn.Id = 0;
+        //        }
+        //        else
+        //        {
+
+        //        }
+        //        LinksContext.MainNode = mn;               
+        //    }
+        //} 
 
         Node node { get; set; }
 
-        Content post { get; set; }
 
         [Parameter]
-        public bool isEdit { get; set; }
+        public int mode { get; set; } = 1;
 
         public bool isInfo { get; set; }
 
         MarkdownPipeline pipeline = new MarkdownPipelineBuilder()
                               .UseAdvancedExtensions()
                               .Build();
-
-        private void ChangeHeader()
-        {
-            //OnHeaderChange.Invoke(node.NodeName);
-            // MainLayout.ChangeHeader(node.NodeName);
-            //MainLayout.header = node.NodeName;
-            //StateHasChanged();
-
-        }
+  
 
         async protected override void OnInitialized()
         {         
-            isEdit = false;
-            isInfo = false;
+         
         
         }
 
-        protected override void OnParametersSet()
+        protected override void OnParametersSet( )
         {
             //if (main!=-1) {Components.NodesMenu.MainNode = main; }    
 
@@ -70,74 +80,38 @@ namespace Links.Pages
             if(node is not null)
             {
              LinksContext.Entry(node)
-            .Reference(c => c.NodeType)
+                    .Reference(c => c.NodeType)            
             .Load();
-
-            post = null;
-            isEdit = false;
-            isInfo = false;
-            ShowPost();
+                LinksContext.Entry(node)
+                         .Reference(c => c.Content)
+                 .Load();
             }
-           
-           
+                    
            
            // LinksContext.ActiveNode = node;
 
             StateHasChanged();
-        }
+        }   
 
-        async Task ShowPost()
+
+        void ChangeEditStatus(int m )
         {
-            post = null;
-            try
-            {
-                post = LinksContext.Contents.Find(nodeId);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
-
-
-        void ChangeEditStatus()
-        {
-            if (isEdit)
+          
+            if (mode ==2 & m!=2)
             {
                 if (node.Content.Data != null &&
-                    node.Content.Data != " ")
+                    node.Content.Data != "")
                 {
                     // LinksContext.ExtContents.Remove(node.IdNavigation);
                     LinksContext.SaveChanges();
-                }
-                isEdit = false;
+                }  
+                
             }
-            else
-            {
-                if (node.Content is null)
-                {
-                    //node.IdNavigation = new ExtContent();
-                    Content content = new Content();
-                    content.Id = node.Id;
-                    content.Data = " ";
-                    content.IdNavigation = node;
-                    LinksContext.Contents.Add(content);
-                    //LinksContext.SaveChanges();
-                }
-                isEdit = true;
-            }
+
+           mode = m; 
 
         }
-        void ChangeInfoStatus()
-        {
-
-            if (isInfo)
-            {
-                isInfo = false;
-            }
-            else isInfo = true;
-
-        }
+     
 
 
         //private string? authMessage;

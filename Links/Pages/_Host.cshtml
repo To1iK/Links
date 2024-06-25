@@ -9,7 +9,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="~/" />
-    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link href="css/site.css" rel="stylesheet" />
     <link href="Links.styles.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="favicon.png"/>
@@ -31,5 +30,38 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
+    <script>
+              
+        const panel = document.getElementById("left_panel");
+
+
+        function resize(e) {
+            if (e.pageX>250){
+            left_panel.style.width = e.pageX - left_panel.getBoundingClientRect().left + 'px'
+            }
+           
+        }
+
+        function panelclick(e){
+
+                if (Math.abs(e.pageX - left_panel.getBoundingClientRect().right)<10){
+            e.preventDefault()
+            window.addEventListener('mousemove', resize)
+            window.addEventListener('mouseup', stopResize)
+                }
+
+           
+          
+            //if (e.offsetX < parseInt(getComputedStyle(panel, '').width + BORDER_SIZE)) {
+            //    m_pos = e.x;
+            //    document.addEventListener("mousemove", resize, false);
+            //}
+        }
+
+        function stopResize() {
+            window.removeEventListener('mousemove', resize)
+        }
+
+    </script>
 </body>
 </html>

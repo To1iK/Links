@@ -1,4 +1,5 @@
 ﻿@using Links.Models;
+@using Microsoft.AspNetCore.Components.QuickGrid
 @using Microsoft.EntityFrameworkCore;
 
 @using System.Diagnostics;
@@ -7,7 +8,7 @@
 @inject Links.Models.LinksContext LinksContext;
 @page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Links</PageTitle>
 
 <h1>Hello, world!</h1>
 
@@ -22,26 +23,35 @@ Welcome to your new app.
 <InputText @bind-Value="noden"></InputText>
 
 
-
 @if (ln != null )
 {
-   @if (ln.Count > 0)
+   @if (ln.Count() > 0)
         {
- @foreach (var c in ln)
+@* @foreach (var c in ln)
 {
      
              <h5>@c.getParentNames()</h5>
-}
+}*@
+
+   <QuickGrid Items="@ln" >
+
+            <PropertyColumn Property="@(p => p.ParentNames)" />
+            <PropertyColumn Property="@(p => p.NodeName)" Sortable="true" />
+
+            <TemplateColumn Title="Name" Sortable="true">
+                <ChildContent>
+                    <NavLink class="nav-link" href='@($"Viewer/{context.Id}")' target="" style="display:inline; padding:0;">
+                        <span>@context.NodeName</span>
+                    </NavLink>
+                </ChildContent>
+            </TemplateColumn>
+
+        </QuickGrid>
         }
         else
 {
-            <h5>@ln.Count</h5>
-}
-    }
-
-
-
-
+            <h5>@ln.Count()</h5>
+}    }
 
 <br />
 n - @n?.NodeName
@@ -55,7 +65,7 @@ n - @n?.NodeName
     string noden;
     string noden2;
     int id;
-    List<Node> ln ;
+    IQueryable<Node> ln ;
     Dictionary<string,object> Code ;
     Node? n { set; get; }
 
@@ -66,8 +76,9 @@ n - @n?.NodeName
             .Contains(x.Data, noden, 1058) || EF.Functions
             .FreeText(x.Data, noden, 1058))
             .Include(x => x.IdNavigation)
+            .ThenInclude(x=>x.ParentNode)
             .Select(x=>x.IdNavigation)
-            .ToList();
+            .AsQueryable();
 
         //n = (Node)e;
         //Debug.WriteLine("ghjghjgjgjg");
@@ -82,5 +93,32 @@ n - @n?.NodeName
        // List<Option<Node>> NodeList = LinksContext.Nodes.Select(x => new Option<Node>{ Value = x }).ToList();
     }
   
+    private string GetHref(Node n)
+    {
+       
+            if (n.NodeType.Code == "link")
+            {
+                return n.NodeContent;
+            }
+            else
+            {
+                return $"Viewer/{n.Id}";
+            }
+        
+    }
+
+    private string GetTarget(Node n)
+    {
+       
+            if (n.NodeType.Code == "link")
+            {
+                return "_blank";
+            }
+            else
+            {
+                return "";
+            }
+        
+    }
 
 }

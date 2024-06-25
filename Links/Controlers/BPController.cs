@@ -117,9 +117,13 @@ where t.id={startTid}
         // PUT: api/Transactions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTransaction(int id, JsonElement trData)
-        {   
-            var t = bpo.updateTr(id, trData);
+        public async Task<IActionResult> PutTransaction(int id, object trData)
+        {
+
+            Debug.WriteLine(trData.ToString());
+            Debug.WriteLine(trData.GetType());
+
+            var t = bpo.updateTr(id, (JsonElement)trData);
 
             return Ok();
           
@@ -130,8 +134,11 @@ where t.id={startTid}
         // POST: api/Transactions
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost("{id}")]
-        public async Task<ActionResult<object>> CreateNewTransaction(int id, JsonElement trData)
+        public async Task<ActionResult<object>> CreateNewTransaction(int id, object trData)
         {
+
+            Debug.WriteLine(trData.ToString());
+            Debug.WriteLine(trData.GetType());
             if (_context.Transactions == null)
             {
                 return Problem("Entity set 'LinksContext.Transactions'  is null.");
@@ -139,10 +146,10 @@ where t.id={startTid}
          
 
             Transaction t;
-             t = bpo.createFirstTrn(id, trData);
-                    return CreatedAtAction("GetTransaction", t.Id );
+             t = bpo.createFirstTrn(id, (JsonElement)trData);
+                    //return CreatedAtAction("GetTransaction", t.Id );
 
-            //return Ok();
+            return Ok();
         }
 
        
@@ -172,8 +179,7 @@ where t.id={startTid}
         {
             return (_context.Transactions?.Any(e => e.Id == id)).GetValueOrDefault();
         }
-
-      
+             
     
 
     }

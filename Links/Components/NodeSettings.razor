@@ -7,11 +7,27 @@
 <Links.Components.Modal @ref="Modal1" OnClose="ModalClose"><Links.Components.AccessEdit @ref="NEC" na="@curentNA" /></Links.Components.Modal>
 
 
-<article style="display:flex; width:90%; margin:auto">
-    
-    <section style="height:30vh">
+<article class="body-content" style="display:flex; flex-direction:column; width:90%; padding:5px;">
 
-        <QuickGrid Items="@LinksContext.NodeAccesses.Include(x=>x.User).Include(x=>x.Group).Where(x =>x.NodeId==node.Id )" >
+    <section style="max-height:30vh">
+
+        <input hidden type="checkbox" id="acs" @bind="isAcsOpened" />
+     
+        <label for="acs" style="display: flex; align-items: center;">
+            @if (isAcsOpened == true)
+            {
+                <svg class="icon"><use xlink:href="symbol-defs.svg#icon-chevron-down"></use></svg>
+            }
+            else
+            {
+                <svg class="icon"><use xlink:href="symbol-defs.svg#icon-chevron-right"></use></svg>
+            }
+            Налаштування доступу
+        </label>
+
+        @if (isAcsOpened)
+        {
+         <QuickGrid Items="@LinksContext.NodeAccesses.Include(x=>x.User).Include(x=>x.Group).Where(x =>x.NodeId==node.Id )" >
           
             <PropertyColumn Property="@(p => p.UserId!=null?"Користувач":"Група")" Sortable="true" />
                 <TemplateColumn Title="Name" Sortable="true">   
@@ -41,10 +57,31 @@
                 </TemplateColumn>
 
         </QuickGrid>
-              
-           
+        }     
     </section>
 
+     <section style="max-height:40vh">
+
+        <input hidden type="checkbox" id="ns" @bind="isNSOpened" />
+       
+        <label for="ns" style="display: flex; align-items: center;">
+            @if (isNSOpened == true)
+            {
+                <svg class="icon"><use xlink:href="symbol-defs.svg#icon-chevron-down"></use></svg>
+            }
+            else
+            {
+                <svg class="icon"><use xlink:href="symbol-defs.svg#icon-chevron-right"></use></svg>
+            }
+            Реквізити інформаційного ресурсу</label>
+
+        @if (isNSOpened)
+        {
+            <NodeEditComponent node="node"></NodeEditComponent>
+        }
+
+
+            </section>
    @* <section style="height:30vh">
 
         <QuickGrid Items="@LinksContext.NodeAccesses.Include(x=>x.Group).Where(x =>x.NodeId==node.Id & x.GroupId !=null)">

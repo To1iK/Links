@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	</head>
+    <body>
+        <style>
+            html, body, #container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+        </style>
+
+        <button style="position: absolute; z-index: 99;" onclick="save()">save</button>
+
+        <div id="container"></div>
+        <script src="min/vs/loader.js"></script>
+        <script src="/Monaco/emmet.js"></script>
+
+        <script>
+
+            let url
+            let queryString = window.location.search;
+
+            const params = new URLSearchParams(queryString);
+            let node = parseInt(params.get("node"));
+
+            var editor;
+
+
+            async function load() {
+
+                url = `https://localhost:44318/api/contents/source/${node}`;
+                let response = await fetch(url);
+                let str = await response.text();
+
+                //editor.setMarkdown(str,false);
+                if (response.ok) {
+
+                    require.config({ paths: { vs: 'min/vs' } });
+
+                    require(['vs/editor/editor.main'], function () {
+
+                        emmetMonaco.emmetHTML()
+
+                        editor = monaco.editor.create(document.getElementById('container'), {
+                            value: [str].join('\n'),
+                            language: 'html',
+                            theme: 'vs-dark',
+                            minimap: {
+                                enabled: false
+                            }
+                        });
+                    });
+
+                  
+                  
+                }
+                else {
+
+
+                }
+
+            }
+
+            load();
+
+            async function save() {
+
+                let text = editor.getModel().getValue()
+
+                let response = await fetch(url
+                    , {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'text/json;'
+                        },
+                        body: JSON.stringify(text)
+                    });
+            }
+
+
+        </script>
+
+
+   
+    </body>
+</html>

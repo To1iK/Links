@@ -1,0 +1,79 @@
+﻿
+@if (node.NodeType.Viewer != null)
+{
+    <iframe id="myFrame" class="body-content"
+            src="@($"{node.NodeType.Viewer}?node={node.Id}")"></iframe>
+}
+
+else if (node.NodeType.Code == "html")
+{
+    <iframe id="myFrame" class="body-content"
+            src="@($"./api/contents/{node.Id}")"></iframe>
+}
+
+else if (node.NodeType.Code == "htags")
+{
+    if (node.Content != null)
+    {
+        <div style="overflow:auto" class="body-content">
+            @((MarkupString)node.Content.Data)
+        </div>
+    }
+    else
+    {
+        @((MarkupString)"Контент відсутній")
+    }
+}
+
+else if (node.NodeType.Code == "md")
+{
+    if (node.Content != null)
+    {
+        <div style="overflow:auto" class="body-content">
+            @((MarkupString)Markdig.Markdown.ToHtml(node.Content.Data, pipeline))
+        </div>
+    }
+    else
+    {
+        @((MarkupString)"Контент відсутній")
+    }
+}
+
+
+else if (node.NodeType.Code == "text" ||
+ node.NodeType.Code == "sql" ||
+ node.NodeType.Code == "js")
+{
+    if (node.Content != null)
+    {
+@*        <div style="padding:0;height:100%;border:none;margin:0">*@
+            <textarea style="resize: none; border:none; padding:4px;" readonly class="body-content">
+                @node.Content.Data
+                            </textarea>
+        @*</div>*@
+       
+    }
+    else
+    {
+        @((MarkupString)"Контент відсутній")
+    }
+}
+
+else if (node.NodeType.Code == "frame")
+{
+    if (node.NodeContent != null)
+    {
+        <iframe id="myFrame" class="body-content"
+                src="@node.NodeContent"></iframe>
+    }
+    else
+    {
+        @((MarkupString)"Контент для iFrame не задано")
+    }
+
+
+
+
+}
+
+

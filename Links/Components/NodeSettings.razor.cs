@@ -26,10 +26,11 @@ namespace Links.Components
         [Parameter]
         public Node node { get; set; }
 
-       //IQueryable<NodeAccess> nau { get; set; }
+        //IQueryable<NodeAccess> nau { get; set; }
 
-       // IQueryable<NodeAccess> nag { get; set; }
-
+        // IQueryable<NodeAccess> nag { get; set; }
+        bool isAcsOpened = false;
+        bool isNSOpened = false;
 
         protected override async Task OnInitializedAsync()
         {

@@ -1,0 +1,30 @@
+﻿@if (node.Content != null)
+{
+
+    if (node.NodeType.Editor != null &&
+        node.NodeType.Editor != "")
+    {
+        <iframe id="myFrame" class="body-content"
+                src="@($"{node.NodeType.Editor}?node={node.Id}")"></iframe>
+    }
+    else
+    {
+
+        <InputTextArea @bind-Value="node.Content.Data" class="body-content" style="background-color: rgb(20 20 20 / 90%); resize:none;
+    color: white;
+    border: solid 1px var(--borderColor2);">
+
+        </InputTextArea>
+
+    }
+
+}
+else
+{
+
+    if (!noContentTypes.Contains(node.NodeType.Code))
+    {
+        createContent();
+    }
+
+}

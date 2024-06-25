@@ -24,14 +24,15 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
-   .AddNegotiate();
+//builder.Services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
+//   .AddNegotiate()
+//   ;
 
-builder.Services.AddAuthorization(options =>
-{
-    // By default, all incoming requests will be authorized according to the default policy.
-    options.FallbackPolicy = options.DefaultPolicy;
-});
+//builder.Services.AddAuthorization(options =>
+//{
+//    // By default, all incoming requests will be authorized according to the default policy.
+//    options.FallbackPolicy = options.DefaultPolicy;
+//});
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -51,7 +52,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.WriteIndented = true;
     }); ;
 
-builder.Services.AddQuickGridEntityFrameworkAdapter();
+
 
 //builder.Services.AddFluentUIComponents();
 
@@ -73,8 +74,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
+
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

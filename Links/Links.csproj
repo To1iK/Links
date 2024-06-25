@@ -9,17 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Jint" Version="3.0.0-beta-2049" />
-    <PackageReference Include="Markdig" Version="0.31.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Negotiate" Version="7.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.0-preview.3.23177.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.0-preview.3.23177.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0-preview.3.23174.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0-preview.3.23174.2">
+    <PackageReference Include="Jint" Version="3.0.0-beta-2051" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Negotiate" Version="8.0.0-preview.7.23375.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.0-preview.7.23375.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.0-preview.7.23375.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0-preview.7.23375.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0-preview.7.23375.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.3.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0-preview.7.23408.2" />
   </ItemGroup>
 
   <ItemGroup>

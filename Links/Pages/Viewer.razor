@@ -1,151 +1,62 @@
 ﻿@page "/Viewer/{nodeId:int}"
-@*@page "/Viewer/{nodeId:int}/{main:int}"*@
+@*@page "/Viewer/{mainNodeId:int}/{nodeId:int}"*@
+
 
     <div id="viewer_header">
 
-    <div style="display:inline">
-       @* <span>Links: </span>*@
-        @((MarkupString)node.NodeType.Icon)
-        <i>@node?.NodeName</i>
+    <div style="display: flex;align-items: center; margin-left:33px">
+      @*  <svg class="icon" viewBox="0 0 32 32" style="border:none">
+            @((MarkupString)node.NodeType.Icon)
+        </svg>*@
+        <i > @node?.NodeName</i>
+   
     </div>
    
+   
     <div class="drop-left-menu">
+
+        @if (mode == 1)
+        {
+            <svg @onclick="()=>ChangeEditStatus(2)" class="icon btn"><use xlink:href="symbol-defs.svg#icon-document-edit"></use></svg>
+
+
+            <svg @onclick="()=>ChangeEditStatus(3)" class="icon btn"><use xlink:href="symbol-defs.svg#icon-settings"></use></svg>
+        }
+            else if (mode == 2)
+            {
+            <svg @onclick="()=>ChangeEditStatus(1)" class="icon btn"><use xlink:href="symbol-defs.svg#icon-eye"></use></svg>
+            <svg @onclick="()=>ChangeEditStatus(3)" class="icon btn"><use xlink:href="symbol-defs.svg#icon-settings"></use></svg>
+        }
+            else if (mode == 3)
+            {
+            <svg @onclick="()=>ChangeEditStatus(1)" class="icon btn"><use xlink:href="symbol-defs.svg#icon-eye"></use></svg>
+            <svg @onclick="()=>ChangeEditStatus(2)" class="icon btn"><use xlink:href="symbol-defs.svg#icon-document-edit"></use></svg>
+            }
+
      
-        <div class="drop-content">
-
-            <svg hidden=@(!node.IsContainer) class="icon-btn" fill="#000000" width="32px" height="32px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M6,6H4A1,1,0,0,1,4,4H6V2A1,1,0,0,1,8,2V4h2a1,1,0,0,1,0,2H8V8A1,1,0,0,1,6,8Zm15,4v4a1,1,0,0,1-1,1H16a1,1,0,0,1-1-1V13H8v6h7V18a1,1,0,0,1,1-1h4a1,1,0,0,1,1,1v4a1,1,0,0,1-1,1H16a1,1,0,0,1-1-1V21H7a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1h8V10a1,1,0,0,1,1-1h4A1,1,0,0,1,21,10ZM17,21h2V19H17Zm2-10H17v2h2Z"></path></g></svg>
-
-            <svg class="icon-btn" @onclick="ChangeEditStatus" width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 5L15 5" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M4 8H15" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M4 11H11" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M18.4563 13.5423L13.9268 18.0719C13.6476 18.3511 13.292 18.5414 12.9048 18.6188L10.8153 19.0367L11.2332 16.9472C11.3106 16.5601 11.5009 16.2045 11.7801 15.9253L16.3096 11.3957M18.4563 13.5423L19.585 12.4135C19.9755 12.023 19.9755 11.3898 19.585 10.9993L18.8526 10.2669C18.4621 9.8764 17.8289 9.8764 17.4384 10.2669L16.3096 11.3957M18.4563 13.5423L16.3096 11.3957" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
-            @*<span class="oi oi-pencil icon-btn" @onclick="edit"></span>*@
-            <svg class="icon-btn" fill="#000000" width="32px" height="32px" viewBox="-7.29 0 122.88 122.88" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="enable-background:new 0 0 108.29 122.88" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M77.4,49.1h-5.94v56.09h5.94V49.1L77.4,49.1L77.4,49.1z M6.06,9.06h32.16V6.2c0-0.1,0-0.19,0.01-0.29 c0.13-2.85,2.22-5.25,5.01-5.79C43.97-0.02,44.64,0,45.38,0H63.9c0.25,0,0.49-0.01,0.73,0.02c1.58,0.08,3.02,0.76,4.06,1.81 c1.03,1.03,1.69,2.43,1.79,3.98c0.01,0.18,0.02,0.37,0.02,0.55v2.7H103c0.44,0,0.75,0.01,1.19,0.08c2.21,0.36,3.88,2.13,4.07,4.37 c0.02,0.24,0.03,0.47,0.03,0.71v10.54c0,1.47-1.19,2.66-2.67,2.66H2.67C1.19,27.43,0,26.23,0,24.76V24.7v-9.91 C0,10.64,2.04,9.06,6.06,9.06L6.06,9.06z M58.07,49.1h-5.95v56.09h5.95V49.1L58.07,49.1L58.07,49.1z M38.74,49.1H32.8v56.09h5.95 V49.1L38.74,49.1L38.74,49.1z M10.74,31.57h87.09c0.36,0.02,0.66,0.04,1.03,0.1c1.25,0.21,2.4,0.81,3.27,1.66 c1.01,1,1.67,2.34,1.7,3.83c0,0.31-0.03,0.63-0.06,0.95l-7.33,78.66c-0.1,1.03-0.27,1.95-0.79,2.92c-1.01,1.88-2.88,3.19-5.2,3.19 H18.4c-0.55,0-1.05,0-1.59-0.08c-0.22-0.03-0.43-0.08-0.64-0.14c-0.31-0.09-0.62-0.21-0.91-0.35c-0.27-0.13-0.52-0.27-0.78-0.45 c-1.51-1.04-2.51-2.78-2.69-4.72L4.5,37.88c-0.02-0.25-0.04-0.52-0.04-0.77c0.05-1.48,0.7-2.8,1.7-3.79 c0.88-0.86,2.06-1.47,3.33-1.67C9.9,31.59,10.34,31.57,10.74,31.57L10.74,31.57z M97.75,36.9H10.6c-0.57,0-0.84,0.1-0.79,0.7 l7.27,79.05h0l0,0.01c0.03,0.38,0.2,0.69,0.45,0.83l0,0l0.08,0.03l0.06,0.01l0.08,0h72.69c0.6,0,0.67-0.84,0.71-1.28l7.34-78.71 C98.53,37.04,98.23,36.9,97.75,36.9L97.75,36.9z"></path> </g> </g></svg>
-            @* <span class="oi oi-trash icon-btn" @onclick="remove_node"></span>*@
-            <svg class="icon-btn" href="@("NodeInfo/" + node.Id)" fill="#000000" xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" viewBox="0 0 52 52" enable-background="new 0 0 52 52" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M21.5,20h9c0.8,0,1.5-0.7,1.5-1.5v-3c0-0.8-0.7-1.5-1.5-1.5h-9c-0.8,0-1.5,0.7-1.5,1.5v3 C20,19.3,20.7,20,21.5,20z"></path> <path d="M46.5,14h-9c-0.8,0-1.5,0.7-1.5,1.5v3c0,0.8,0.7,1.5,1.5,1.5h9c0.8,0,1.5-0.7,1.5-1.5v-3 C48,14.7,47.3,14,46.5,14z"></path> <path d="M5.5,10h41c0.8,0,1.5-0.7,1.5-1.5v-5C48,2.7,47.3,2,46.5,2h-41C4.7,2,4,2.7,4,3.5v5C4,9.3,4.7,10,5.5,10z"></path> <path d="M48,27.4v-1.9c0-0.8-0.7-1.5-1.5-1.5h-2.7c1.3,0.7,2.5,1.6,3.5,2.7C47.6,26.9,47.8,27.2,48,27.4z"></path> <path d="M20,25.5v3c0,0.8,0.7,1.5,1.5,1.5h0.7c0.7-1.2,1.5-2.3,2.5-3.3c1.1-1.1,2.3-2,3.5-2.7h-6.7 C20.7,24,20,24.7,20,25.5z"></path> <path d="M24.7,49.3c-1.5-1.5-2.7-3.3-3.5-5.2c-0.7,0.1-1.2,0.8-1.2,1.5v3c0,0.8,0.7,1.5,1.5,1.5h4 C25.2,49.8,25,49.5,24.7,49.3z"></path> <path d="M14.5,14h-9C4.7,14,4,14.7,4,15.5v3C4,19.3,4.7,20,5.5,20h9c0.8,0,1.5-0.7,1.5-1.5v-3 C16,14.7,15.3,14,14.5,14z"></path> <path d="M14.5,24h-9C4.7,24,4,24.7,4,25.5v3C4,29.3,4.7,30,5.5,30h9c0.8,0,1.5-0.7,1.5-1.5v-3 C16,24.7,15.3,24,14.5,24z"></path> <path d="M14.5,44h-9C4.7,44,4,44.7,4,45.5v3C4,49.3,4.7,50,5.5,50h9c0.8,0,1.5-0.7,1.5-1.5v-3 C16,44.7,15.3,44,14.5,44z"></path> <path d="M14.5,34h-9C4.7,34,4,34.7,4,35.5v3C4,39.3,4.7,40,5.5,40h9c0.8,0,1.5-0.7,1.5-1.5v-3 C16,34.7,15.3,34,14.5,34z"></path> </g> <g> <path d="M36.1,35c-1.7,0-3,1.3-3,3s1.3,3,3,3c1.6,0,2.9-1.4,3-3C39,36.3,37.7,35,36.1,35z"></path> <path d="M44.5,29.5c-4.7-4.7-12.3-4.7-17,0c-4.7,4.7-4.7,12.3,0,17c4.7,4.7,12.3,4.7,17,0 C49.2,41.8,49.2,34.2,44.5,29.5z M43.9,39c0,0.3-0.1,0.5-0.5,0.5c-0.4,0.1-0.8,0.1-1.2,0.1c-0.1,0-0.1,0.1-0.1,0.1 c-0.1,0.5-0.4,0.8-0.5,1.3c-0.1,0.1-0.1,0.1,0,0.2c0.2,0.4,0.5,0.7,0.7,1c0.1,0.2,0.1,0.5-0.1,0.7l-1.3,1.3 c-0.2,0.1-0.3,0.1-0.4,0.1s-0.3-0.1-0.3-0.1c-0.3-0.2-0.7-0.5-1-0.7c0-0.1-0.1-0.1-0.1-0.1H39c-0.3,0.1-0.8,0.4-1.3,0.5 c-0.1,0-0.1,0.1-0.1,0.1c-0.1,0.4-0.1,0.8-0.1,1.2c-0.1,0.3-0.5,0.5-0.5,0.5h-1.9c-0.3,0-0.5-0.1-0.5-0.5 c-0.1-0.4-0.1-0.8-0.1-1.2c0-0.1-0.1-0.1-0.1-0.1c-0.5-0.1-0.8-0.4-1.3-0.5H33c-0.1,0-0.1,0.1-0.1,0.1c-0.4,0.2-0.7,0.5-1,0.7 c-0.1,0.1-0.3,0.1-0.3,0.1c-0.2,0-0.3,0-0.4-0.1l-1.3-1.3c-0.2-0.2-0.2-0.5-0.1-0.7c0.2-0.3,0.5-0.7,0.7-1c0.1-0.1,0-0.1,0-0.2 c-0.1-0.5-0.4-0.8-0.5-1.3c0-0.1-0.1-0.1-0.1-0.1c-0.4-0.1-0.7-0.1-1.1-0.1c-0.2-0.1-0.4-0.2-0.5-0.4v-2.2 c0.1-0.3,0.3-0.4,0.5-0.4c0.4-0.1,0.7-0.1,1.1-0.1c0.1,0,0.1-0.1,0.1-0.1c0.1-0.5,0.4-0.8,0.5-1.3c0.1-0.1,0.1-0.1,0-0.2 c-0.2-0.4-0.5-0.7-0.7-1c-0.1-0.2-0.1-0.5,0.1-0.7l1.3-1.3c0.2-0.1,0.2-0.1,0.4-0.1s0.3,0.1,0.3,0.1c0.4,0.2,0.7,0.5,1,0.7 c0.1,0.1,0.1,0.1,0.1,0.1H33c0.5-0.1,0.8-0.4,1.3-0.5c0.1,0,0.1-0.1,0.1-0.1c0.1-0.4,0.1-0.7,0.1-1.1c0-0.2,0.2-0.4,0.3-0.5 c0.1-0.1,0.2-0.1,0.3-0.1h1.9c0,0,0.1,0,0.1,0.1c0.3,0.1,0.3,0.3,0.3,0.5c0.1,0.4,0.1,0.7,0.1,1.1c0,0.1,0.1,0.1,0.1,0.1 c0.5,0.1,0.8,0.4,1.3,0.5h0.1c0,0,0-0.1,0.1-0.1c0.3-0.2,0.7-0.5,1-0.7c0.1-0.1,0.3-0.1,0.3-0.1c0.1,0,0.3,0.1,0.3,0.1l1.3,1.3 c0.2,0.2,0.2,0.5,0.1,0.7c-0.2,0.3-0.5,0.7-0.7,1v0.2c0.1,0.3,0.4,0.8,0.5,1.3c0,0.1,0.1,0.1,0.1,0.1c0.4,0.1,0.8,0.1,1.2,0.1 c0.3,0.1,0.5,0.2,0.5,0.7V39z"></path> </g> </g> </g></svg>
-            @* <a class="icon-btn oi oi-fork" href="@("NodeInfo/" + node.Id)"> </a>*@
-
-        </div>
-        <svg class="drop-btn icon-btn" fill="#000000" width="32px" height="32px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M0 0h7v7H0V0zm2 2v3h3V2H2zM0 9h7v7H0V9zm9-9h7v7H9V0zm2 2v3h3V2h-3zM9 9h7v7H9V9zm2 2v3h3v-3h-3zm-9 0v3h3v-3H2z" fill-rule="evenodd"></path> </g></svg>
-        @* <span class="oi oi-grid-three-up drop-btn icon-btn"></span>*@
-        <span>@LinksContext.curentUser?.Name</span>
-    </div>
-
-    
+    @*    @((MarkupString)node.NodeType.Icon)*@
+       @* </div>
+      
+         <span class="oi oi-grid-three-up drop-btn icon-btn"></span>*@
+          
+    </div>    
 
 </div>
 
-<details>
+
+@if (mode == 1)
+{
+    <Links.Components.ViewComponent node="node"></Links.Components.ViewComponent>
+}
+else if (mode == 2)
+{
+    <Links.Components.EditComponent node="node"></Links.Components.EditComponent>
+}
+else if (mode == 3)
+{
     <Links.Components.NodeSettings node="node"></Links.Components.NodeSettings>
-</details>
-
-
-
-
-@if (node is not null)
-{
-@if (isEdit)
-{
-    if (post != null)
-    {
-
-        if (node.NodeType.Editor != null &&
-            node.NodeType.Editor != "")
-        {
-            <iframe id="myFrame" class="body-content"
-                    src="@($"{node.NodeType.Editor}?node={node.Id}")"></iframe>
-        }
-        else
-        {
-            <EditForm Model="post" class="body-content">
-
-                <InputTextArea @bind-Value="post.Data" class="body-content editableContent">
-
-                </InputTextArea>
-
-            </EditForm>
-
-        }
-
-    }
 }
 
-else
-{
-
-    if (node.NodeType.Viewer != null)
-    {
-        <iframe id="myFrame" class="body-content"
-                src="@($"{node.NodeType.Viewer}?node={node.Id}")"></iframe>
-    }
-
-        else if (node.NodeType.Code == "html" )
-    {
-        <iframe id="myFrame" class="body-content"
-                src="@($"./api/contents/{node.Id}")"></iframe>
-    }
-
-        else if (node.NodeType.Code == "htags")
-    {
-        if (post != null)
-        {
-            <div style="overflow:auto" class="body-content">
-                @((MarkupString)post.Data)
-            </div>
-        }
-        else
-        {
-            @((MarkupString)"Контент відсутній")
-        }
-    }
-        else if (node.NodeType.Code == "md")
-        {
-            if (post != null)
-            {
-                <div style="overflow:auto" class="body-content">
-                    @((MarkupString)Markdig.Markdown.ToHtml(post.Data, pipeline))
-                </div>
-            }
-            else
-            {
-                @((MarkupString)"Контент відсутній")
-            }
-        }
-
-
-    else if (node.NodeType.Code == "text" ||
-     node.NodeType.Code == "sql" ||
-     node.NodeType.Code == "js")
-    {
-        if (post != null)
-        {
-            <textarea readonly class="body-content">
-                @post.Data
-            </textarea>
-        }
-        else
-        {
-                @((MarkupString)"Контент відсутній")
-            }
-        }
-
-        else if (node.NodeType.Code == "frame"  )
-        {     
-            if (node.NodeContent != null)
-            {
-                  <iframe id="myFrame" class="body-content"
-                src="@node.NodeContent"></iframe>
-            }
-            else
-            {
-                 @((MarkupString)"Контент для iFrame не задано")
-            }
-
-               
-          
-
-        }
-
-
-    }
-}
 
 
 

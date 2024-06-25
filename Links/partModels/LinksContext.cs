@@ -9,5 +9,7 @@ namespace Links.Models;
 public partial class LinksContext : DbContext
 {
     public User curentUser;
+    public Node MainNode;
+    public Node selectedNode;
 
 }

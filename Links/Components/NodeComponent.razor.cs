@@ -113,7 +113,7 @@ namespace Links.Components
                 node = na.Node;
             }           
 
-            if (node.isExpanded)
+            if (node is not null && node.isExpanded)
             {               
                 nodes = GetCurentNodes(node.Id)
                             .ToList();

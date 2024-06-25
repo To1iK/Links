@@ -243,16 +243,39 @@ namespace Links.Controlers
 
      object MD(string data)
         {
-                var pipeline = new MarkdownPipelineBuilder()
-                               .UseAdvancedExtensions()                            
+
+            var pipeline = new MarkdownPipelineBuilder();
+
+                pipeline
+            //      .UseAbbreviations()
+            //.UseAutoIdentifiers()
+            //.UseCitations()
+            //.UseCustomContainers()
+            //.UseDefinitionLists()
+            //.UseEmphasisExtras()
+            //.UseFigures()
+            //.UseFooters()
+            //.UseFootnotes()
+            //.UseGridTables()
+            //.UseMathematics()
+            //.UseMediaLinks()
+            //.UsePipeTables()
+            //.UseListExtras()
+            //.UseTaskLists()
+            //.UseDiagrams()
+            //.UseAutoLinks()
+            //.UseGenericAttributes()
+                               .UseAdvancedExtensions()                               
                                .Build();
+
             try
-            {              
+            {
                 return new ContentResult
                 {
-                    ContentType = "text/html; charset=utf-8",                    
+                    ContentType = "text/html; charset=utf-8",
                     StatusCode = (int)System.Net.HttpStatusCode.OK,
-                    Content = Markdig.Markdown.ToHtml(data,pipeline)
+                    // Content = Markdig.Markdown.ToHtml(data,pipeline)
+                    Content = ""
                 };
             }
            catch(Exception ex)

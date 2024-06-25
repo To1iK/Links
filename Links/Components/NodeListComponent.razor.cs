@@ -16,6 +16,7 @@ using Links.Shared;
 using Links.Models;
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace Links.Components
 {
@@ -26,9 +27,9 @@ namespace Links.Components
         public int nodeId { get; set; } = 0;
 
         //[Parameter]
-        //public static int MainNode { get; set; } = -1;
+        //public static int MainNode { get; set; } = 0;
 
-        public Node selectedNode { get; set; }
+       // public Node selectedNode { get; set; }
 
         private string curentUser;
 
@@ -40,11 +41,11 @@ namespace Links.Components
 
         void select(Node n)
         {     
-            if(selectedNode is not null && selectedNode != n)
+            if(LinksContext.selectedNode is not null && LinksContext.selectedNode != n)
             {
-            selectedNode.isSelected = false;           
+                LinksContext.selectedNode.isSelected = false;           
             }
-            selectedNode = n;
+            LinksContext.selectedNode = n;
             Debug.WriteLine(n.NodeName);
         }
 
@@ -56,28 +57,47 @@ namespace Links.Components
 
         void ModalClose()
         {
-            selectedNode.EditTime = DateTime.Now;
+            LinksContext.selectedNode.EditTime = DateTime.Now;
             LinksContext.SaveChanges();
             StateHasChanged();
         }
 
         protected override async Task OnInitializedAsync()
         {
-            Nodes = GetCurentNodes(nodeId)
+            Nodes = GetCurentNodes(LinksContext.MainNode.Id)
                       .ToList();  
             
         }
 
         protected override async Task OnParametersSetAsync()
         {
-            Nodes = GetCurentNodes(nodeId)
+            Nodes = GetCurentNodes(LinksContext.MainNode.Id)
                       .ToList();
+
 
         }
 
         private List<NodeAccess2> GetCurentNodes(int nodeId)
         {
             var userId = LinksContext.curentUser.Id;
+
+            Node? userNode = LinksContext.Nodes.Find(LinksContext.curentUser.NodeId);
+            Node? curentNode = LinksContext.Nodes.Find(1036);
+
+            List<NodeAccess2> ln = new List<NodeAccess2>();
+           
+            NodeAccess2 na1 = new NodeAccess2();
+            na1.AccessLevel = 100;
+            NodeAccess2 na2 = new NodeAccess2();
+            na2.AccessLevel = 100;
+
+            na1.Node = userNode;
+            na2.Node = curentNode;
+
+            ln.Add(na2);
+            ln.Add(na1);
+        
+
             var nal = LinksContext.NodeAccesses2.FromSqlRaw($@"
   select 
    NodeId as NodeId 
@@ -95,8 +115,9 @@ and (na.UserId = {userId} or ug.UserId = {userId})
 //.Select(x => x.Node)
 .ToList();
 
-            return nal;
+           // return nal;
 
+            return ln;
             //var Nodes2 = LinksContext.Nodes
             //             .Where(x=>x.ParentNodeId==0 & x.IsActive == true)
             //             .Include(x=>x.NodeType)

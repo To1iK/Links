@@ -1,0 +1,29 @@
+﻿
+.custCombo {
+    position: relative;
+    cursor: pointer;
+}
+
+.custComboLabel {
+    display: flex;
+    align-content: center;
+    cursor: pointer;
+}
+
+.custComboBody {
+    width: 100%;
+    min-height: 28px;
+    padding: 1px;
+    color: black;
+    background-color: lightyellow;
+    border: red solid 1px;
+    border-radius: 8px;
+    position: absolute;
+}
+
+.custComboSearch {
+    width: 100%;
+    display: flex;
+    align-content: center;
+    z-index: 9999;   
+}

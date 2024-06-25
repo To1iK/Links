@@ -1,17 +1,45 @@
-﻿@inherits LayoutComponentBase
-
+﻿@using Links.Models;
+@inherits LayoutComponentBase
+@page "/Main/{MainNodeId:int}"
 <PageTitle>Links</PageTitle>
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+
+
+    @if (isSidebarVisible)
+    {
+        <div class="sidebar" id="left_panel" onmousedown="panelclick(event)">
+            <div id="menu_header">
+
+                <a href="" style="margin-left:33px">Links </a>
+                <div>
+                    <span>@LinksContext.curentUser?.Name</span>
+                    @* <span>@curentNode?.NodeName</span>*@
+                    <svg class="icon"><use xlink:href="symbol-defs.svg#icon-profile-male"></use></svg>
+
+                </div>
+            </div>
+
+            <div class="menu_list">
+                <Links.Components.NodeListComponent></Links.Components.NodeListComponent>
+            </div>
+        </div>
+    }
+    @*    <button @onclick="changeSidebarVis" style="display:block; position:fixed; width:32px;height:32px; z-index=2">
+         @(isSidebarVisible ? "X" : "L")
+        </button>*@
+
+    @*<svg @onclick="changeSidebarVis" style="display:block; position:fixed; width:32px;height:32px; z-index=2" class="icon"><use xlink:href="symbol-defs.svg#icon-links"></use></svg>*@
+   
+    @*style="fill:none;fill-opacity:1;stroke-width:2.9488;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1"*@
+
+    <input id="menu__toggle" type="checkbox" @onclick="changeSidebarVis" checked/>
+    <label class="menu__btn" for="menu__toggle">
+        <span></span>
+    </label>
 
     <main>
-         
-            @Body
-  
-   @*     <Links.Pages.Viewer></Links.Pages.Viewer>*@
+        @Body
     </main>
 </div>
 
@@ -22,6 +50,16 @@
 
     [Inject]
     AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+    [Parameter]
+    public int mainNodeId { get; set; } = 0;
+
+    bool isSidebarVisible = true;
+
+    void changeSidebarVis()
+    {
+        isSidebarVisible = !isSidebarVisible;
+    }
 
     async protected override void OnInitialized()
     {
@@ -62,8 +100,18 @@
 
         }
 
-     
-
+        var mn = LinksContext.Nodes.Find(mainNodeId);
+        if (mn == null)
+        {
+            mn = new Node();
+            mn.NodeName = "Кореневий вузол Links";
+            mn.Id = 0;
+        }
+        else
+        {
+           
+        }
+        LinksContext.MainNode = mn;
   
 
     }

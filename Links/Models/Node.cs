@@ -51,26 +51,5 @@ public partial class Node
 
     public virtual ICollection<UserNode> UserNodes { get; set; } = new List<UserNode>();
 
-    public Dictionary<int, Node> getParents()
-    {
-        Dictionary<int, Node> dn = new Dictionary<int, Node>();
-        Node pn=ParentNode;
-        while(pn!=null)
-        {           
-            dn.Add(pn.Id, pn);
-            pn = pn.ParentNode;
-        }
-        return dn;
-    }
-    public string getParentNames()
-    {
-        string parents=NodeName;
-        Node pn = ParentNode;
-        while (pn != null)
-        {
-            parents = pn.NodeName + "/" + parents;
-            pn = pn.ParentNode;
-        }
-        return parents;
-    }
+ 
 }
